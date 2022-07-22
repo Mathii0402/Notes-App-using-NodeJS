@@ -4,6 +4,7 @@ const chalk=require('chalk')
 
 
 
+
 const addnotes=(title,body)=>
 {
     // var notes=[]
@@ -14,11 +15,23 @@ const addnotes=(title,body)=>
         // const datastr=databuffer.toString()
         // notes= JSON.parse(datastr)
         
-        const duplicates=notes.filter(function(note)
-        {
-            return note.title===title
-        })
-        if (duplicates.length===0)
+        const duplicates=notes.filter((note)=>note.title===title)//this will check the whole code until the last line
+        const duplicate=notes.find((note)=>note.title===title)//this will check once whether other match is found or not
+        // if (duplicates.length===0)
+        // {
+        //     notes.push({
+        //         title:title,
+        //         body:body
+        //     })
+        //     console.log(notes)
+        //     save(notes)
+        //     console.log(chalk.green.inverse('new notes added!'))
+        // }
+        // else
+        // {
+        //     console.log(chalk.red.inverse('notes already taken!'))
+        // }
+        if (!duplicate)
         {
             notes.push({
                 title:title,
@@ -61,12 +74,10 @@ const loadnotes=()=>
 }
 const removenotes=(title)=>
 {
-    try{
-        const data=loadnotes()
-        const notestokeep=data.filter(function(keep)
-        {
-            return keep.title!==title
-        })
+    
+    const data=loadnotes()
+        const notestokeep=data.filter((keep)=>keep.title!==title)
+       
         
         if (notestokeep.length!=data.length)
         {
@@ -74,25 +85,73 @@ const removenotes=(title)=>
             save(notestokeep)
             console.log(chalk.green.inverse('notes removed!'))
         }
-        else{
-            console.log(chalk.red.inverse('no notes found!'))
+        else if(notestokeep==0)
+        {
+            console.log(chalk.red.inverse('notes is empty!'))
         }
+        else{
+            console.log(chalk.yellowBright.inverse('no notes found!'))
+        }
+   
+}
 
-       
-    }
-    catch(e)
-    {
-        console.log('notes is empty!')
-    }
-}
-const getnotes=()=>
+
+
+const listnotes=()=>
 {
-    return "My notes....."
+    const listednotes=loadnotes()
+    console.log(chalk.inverse.blue("Your notes!"))
+    listednotes.forEach(note => {
+        console.log(note.title)
+    });
 }
+
+
+const readnotes=(title)=>
+{
+    const notes=loadnotes()
+    const display=notes.find((note)=>title===note.title)
+    if(display)
+    {
+        console.log(chalk.inverse.bold.white(display.title))
+        console.log(display.body)
+    }
+    else{
+        console.log(chalk.inverse.red("No notes found!"))
+    }
+}
+
+const editnotes=(title,body)=>
+{
+    const notes=loadnotes()
+
+    const newedit=notes.find((note)=>
+    {
+        if(note.title === title)
+        {
+            note.body = body
+            save(notes)
+            console.log(chalk.inverse.green("Notes have been edited!"))
+            console.log(notes)
+        }
+        
+        else
+        {
+            console.log(chalk.inverse.red('No title found!'))
+            
+        }
+    })
+}
+    
+        
+       
+
 
 module.exports=
 {
     addnotes:addnotes,
-    getnotes:getnotes,
-    removenotes:removenotes
+    removenotes:removenotes,
+    listnotes:listnotes,
+    readnotes:readnotes,
+    editnotes:editnotes
 }
