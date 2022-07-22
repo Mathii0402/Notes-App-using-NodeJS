@@ -97,61 +97,8 @@ const removenotes=(title)=>
 
 
 
-const listnotes=()=>
-{
-    const listednotes=loadnotes()
-    console.log(chalk.inverse.blue("Your notes!"))
-    listednotes.forEach(note => {
-        console.log(note.title)
-    });
-}
-
-
-const readnotes=(title)=>
-{
-    const notes=loadnotes()
-    const display=notes.find((note)=>title===note.title)
-    if(display)
-    {
-        console.log(chalk.inverse.bold.white(display.title))
-        console.log(display.body)
-    }
-    else{
-        console.log(chalk.inverse.red("No notes found!"))
-    }
-}
-
-const editnotes=(title,body)=>
-{
-    const notes=loadnotes()
-
-    const newedit=notes.find((note)=>
-    {
-        if(note.title === title)
-        {
-            note.body = body
-            save(notes)
-            console.log(chalk.inverse.green("Notes have been edited!"))
-            console.log(notes)
-        }
-        
-        else
-        {
-            console.log(chalk.inverse.red('No title found!'))
-            
-        }
-    })
-}
-    
-        
-       
-
-
 module.exports=
 {
     addnotes:addnotes,
-    removenotes:removenotes,
-    listnotes:listnotes,
-    readnotes:readnotes,
-    editnotes:editnotes
+    removenotes:removenotes
 }
